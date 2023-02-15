@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .gitpod.yml
+static
 
 # C extensions
 *.so
