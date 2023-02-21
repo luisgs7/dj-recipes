@@ -50,6 +50,21 @@ class RecipeViewsTest(RecipeTestBase):
         )
         self.assertEqual(response.status_code, 404)
 
+    def test_recipe_category_template_loads_recipes(self):
+        #TODO Criando uma nova receita a partir da classe RecipeTestBase # noqa disable=E265
+        needed_title = 'This is a category test'
+        self.make_recipe(title=needed_title)
+
+        response = self.client.get(reverse('recipes:category', kwargs={
+            'category_id': 1,
+        }))
+        #TODO Esta função permite buscar os dados do html(Do template) # noqa disable=E265
+        content = response.content.decode('utf-8')
+
+        self.assertIn(needed_title, content)
+        self.assertIn('10 Minutos', content)
+        self.assertIn('5 Porções', content)
+
     def test_recipe_detail_view_function_is_correct(self):
         view = resolve(reverse('recipes:recipe', kwargs={'id': 1}))
         self.assertIs(view.func, views.recipe)
@@ -59,3 +74,18 @@ class RecipeViewsTest(RecipeTestBase):
             reverse('recipes:recipe', kwargs={'id': 1000})
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_recipe_detail_template_loads_recipes(self):
+        #TODO Criando uma nova receita a partir da classe RecipeTestBase # noqa disable=E265
+        needed_title = 'This is a detail page - It load one recipe'
+        self.make_recipe(title=needed_title)
+
+        response = self.client.get(reverse('recipes:recipe', kwargs={
+            'id': 1,
+        }))
+        #TODO Esta função permite buscar os dados do html(Do template) # noqa disable=E265
+        content = response.content.decode('utf-8')
+
+        self.assertIn(needed_title, content)
+        self.assertIn('10 Minutos', content)
+        self.assertIn('5 Porções', content)
