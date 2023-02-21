@@ -1,11 +1,9 @@
-from django.test import TestCase
 from django.urls import reverse, resolve
 from recipes import views
-from recipes.models import Category, Recipe
-from django.contrib.auth.models import User
+from .test_recipe_base import RecipeTestBase
 
 
-class RecipeViewsTest(TestCase):
+class RecipeViewsTest(RecipeTestBase):
     def test_reicpe_home_view_function_is_correct(self):
         view = resolve(reverse('recipes:home'))
         self.assertIs(view.func, views.home)
@@ -25,28 +23,9 @@ class RecipeViewsTest(TestCase):
         # A função decode é para converter de bytes para string
 
     def test_recipe_home_template_loads_recipes(self):
-        category = Category.objects.create(name='Category')
-        author = User.objects.create_user(
-            first_name='user',
-            last_name='name',
-            username='username',
-            password='123456',
-            email='username@email.com',
-        )
-        recipe = Recipe.objects.create(   # noqa disable=F841
-            category=category,
-            author=author,
-            title='Recipe Title',
-            description='Recipe Description',
-            slug='recipe-slug',
-            preparation_time=10,
-            preparation_time_unit='Minutos',
-            servings=5,
-            servings_unit='Porções',
-            preparation_steps='Recipe Preparation Steps',
-            preparation_steps_is_html=False,
-            is_published=True,
-        )
+        #TODO Criando uma nova receita a partir da classe RecipeTestBase # noqa disable=E265
+        self.make_recipe(category_data={'name': 'café da manhã'})
+
         response = self.client.get(reverse('recipes:home'))
         #TODO Esta função permite buscar os dados do html(Do template) # noqa disable=E265
         content = response.content.decode('utf-8')
@@ -54,6 +33,7 @@ class RecipeViewsTest(TestCase):
         self.assertIn('Recipe Title', content)
         self.assertIn('10 Minutos', content)
         self.assertIn('5 Porções', content)
+        self.assertIn('café da manhã', content)
 
         #TODO Buscar os dados a partir do context da view, antes de serem enviados ao template  # noqa disable=E265
         context = response.context['recipes']
