@@ -33,7 +33,7 @@ class RecipeViewsTest(TestCase):
             password='123456',
             email='username@email.com',
         )
-        recipe = Recipe.objects.create(
+        recipe = Recipe.objects.create(   # noqa disable=F841
             category=category,
             author=author,
             title='Recipe Title',
@@ -47,7 +47,18 @@ class RecipeViewsTest(TestCase):
             preparation_steps_is_html=False,
             is_published=True,
         )
-        self.assertEqual(2, 1+1)
+        response = self.client.get(reverse('recipes:home'))
+        #TODO Esta função permite buscar os dados do html(Do template) # noqa disable=E265
+        content = response.content.decode('utf-8')
+
+        self.assertIn('Recipe Title', content)
+        self.assertIn('10 Minutos', content)
+        self.assertIn('5 Porções', content)
+
+        #TODO Buscar os dados a partir do context da view, antes de serem enviados ao template  # noqa disable=E265
+        context = response.context['recipes']
+
+        self.assertEqual(len(context), 1)
 
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(reverse('recipes:category', kwargs={'category_id': 1}))
