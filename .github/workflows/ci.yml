@@ -20,10 +20,8 @@ jobs:
       - name: Lint Flake8
         run: flake8 project/* recipes/* utils/*
 
-      - name: Code Coverage
-        run: coverage run -m pytest && coverage html
+      - name: Generate Report
+        run: coverage run -m unittest
 
-      - uses: codecov/codecov-action@v3
-        with:
-          files: ./htmlcov/index.html
-          verbose: true # optional (default = false)
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v2
