@@ -1,0 +1,29 @@
+---
+name: Checks
+
+on: [push, pull_request_review]
+
+jobs:
+  test-lint:
+    name: Test and Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install pip and packages
+        uses: luisgs7/pip-packages@v1
+
+      - name: Test Recipe App
+        run: pytest
+
+      - name: Lint Flake8
+        run: flake8 project/* recipes/* utils/*
+
+      - name: Code Coverage
+        run: coverage run -m pytest && coverage html
+
+      - uses: codecov/codecov-action@v3
+        with:
+          files: ./htmlcov/index.html
+          verbose: true # optional (default = false)
