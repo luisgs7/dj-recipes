@@ -21,7 +21,7 @@ jobs:
         run: flake8 project/* recipes/* utils/*
 
       - name: Generate Report
-        run: coverage run -m unittest
+        run: coverage run -m pytest
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v2
