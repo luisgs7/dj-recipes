@@ -15,13 +15,13 @@ class RecipeModelTest(RecipeTestBase):
     #     with self.assertRaises(ValidationError):
     #         self.recipe.full_clean()
 
-    def make_recipe_no_defaults(self):
+    def make_recipe_no_defaults(self, slug):
         recipe = Recipe(
             category=self.make_category(name='Test Default Category'),
             author=self.make_author(username='newuser'),
             title='Recipe Title',
             description='Recipe Description',
-            slug='recipe-slug',
+            slug=slug,
             preparation_time=10,
             preparation_time_unit='Minutos',
             servings=5,
@@ -44,14 +44,14 @@ class RecipeModelTest(RecipeTestBase):
             self.recipe.full_clean()
 
     def test_recipe_preparation_steps_is_html_is_false_by_default(self):
-        recipe = self.make_recipe_no_defaults()
+        recipe = self.make_recipe_no_defaults(slug="slug-01")
         self.assertFalse(
             recipe.preparation_steps_is_html,
             msg='Recipe preparation_steps_is_html is not False',
         )
 
     def test_recipe_is_published_is_false_by_default(self):
-        recipe = self.make_recipe_no_defaults()
+        recipe = self.make_recipe_no_defaults(slug="slug-02")
         self.assertFalse(
             recipe.is_published,
             msg='Recipe is_published is not False',
