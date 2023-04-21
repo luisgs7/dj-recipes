@@ -25,7 +25,7 @@ def make_pagination_range(
         'pagination': pagination,
         'page_range': page_range,
         'qty_pages': qty_pages,
-        'current_pages': current_page,
+        'current_page': current_page,
         'total_pages': total_pages,
         'start_range': start_range,
         'stop_range': stop_range,

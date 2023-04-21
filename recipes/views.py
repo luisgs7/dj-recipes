@@ -13,7 +13,6 @@ def home(request):
               is_published=True,
               ).order_by('-id')
 
-    current_page = request.GET.get('page', 1)
     try:
         current_page = int(request.GET.get('page', 1))
     except ValueError:
@@ -24,13 +23,14 @@ def home(request):
 
     pagination_range = make_pagination_range(
         paginator.page_range,
-        1,
+        2,
         current_page,
     )
+    print("CURRENT PAGE: ", current_page)
 
     return render(request, "recipes/pages/home.html",
                   context={
-                      "recipes": page_obj,
+                      'recipes': page_obj,
                       'pagination_range': pagination_range,
                   })
 
