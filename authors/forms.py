@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 
@@ -78,3 +79,27 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Type your password here',
             })
         }
+
+    def clean_password(self):
+        data = self.cleaned_data.get('password')
+
+        message = 'atenção'
+
+        if message in data:
+            raise ValidationError(
+                'Não digite %(value)s no campo password',
+                code='invalid',
+                params={'value': f'"{message}"'}
+            )
+
+    def clean_first_name(self):
+        data = self.cleaned_data.get('first_name')
+
+        message = 'John Doe'
+
+        if message in data:
+            raise ValidationError(
+                'Não digite %(value)s no campo first_name',
+                code='invalid',
+                params={'value': f'"{message}"'}
+            )
