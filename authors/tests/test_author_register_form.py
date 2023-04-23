@@ -16,7 +16,7 @@ class AuthorRegisterFormUnitTest(TestCase):
     ])
     def test_fields_placeholder(self, field, placeholder):
         form = RegisterForm()
-        current_placeholder = form[field].field.widget.attrs['placeholder']  
+        current_placeholder = form[field].field.widget.attrs['placeholder']
         self.assertEqual(current_placeholder, placeholder)
 
     @parameterized.expand([
