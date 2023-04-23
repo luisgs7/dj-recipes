@@ -106,6 +106,7 @@ class RegisterForm(forms.ModelForm):
                 code='invalid',
                 params={'value': f'"{message}"'}
             )
+        return data
 
     def clean_first_name(self):
         data = self.cleaned_data.get('first_name')
