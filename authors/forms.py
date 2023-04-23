@@ -119,14 +119,13 @@ class RegisterForm(forms.ModelForm):
                 code='invalid',
                 params={'value': f'"{message}"'}
             )
+        return data
 
     def clean(self):
         cleaned_data = super().clean()
 
         password = cleaned_data.get('password')
         password2 = cleaned_data.get('password2')
-        print("PASSWORD: ", password)
-        print("PASSWORD2: ", password2)
 
         if password != password2:
             password_confirmation_error = ValidationError(
