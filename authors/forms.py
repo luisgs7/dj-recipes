@@ -50,7 +50,8 @@ class RegisterForm(forms.ModelForm):
             'one lowercase letter and one number. The length should be '
             'at least 8 characters.'
         ),
-        validators=[strong_password]
+        validators=[strong_password],
+        label='Password',
     )
 
     password2 = forms.CharField(
@@ -58,7 +59,8 @@ class RegisterForm(forms.ModelForm):
         # widget=forms.PasswordInput(attrs={
         #     'placeholder': 'Repeat your password'
         # })
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(),
+        label='Password2',
     )
 
     class Meta:
@@ -76,7 +78,7 @@ class RegisterForm(forms.ModelForm):
             'first_name': 'First name',
             'last_name': 'Last name',
             'email': 'E-mail',
-            'password': 'Password',
+            # 'password': 'Password',
         }
 
         help_texts = {
@@ -99,31 +101,31 @@ class RegisterForm(forms.ModelForm):
         #     })
         # }
 
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
+    # def clean_password(self):
+    #     data = self.cleaned_data.get('password')
 
-        message = 'atenção'
+    #     message = 'atenção'
 
-        if message in data:
-            raise ValidationError(
-                'Não digite %(value)s no campo password',
-                code='invalid',
-                params={'value': f'"{message}"'}
-            )
-        return data
+    #     if message in data:
+    #         raise ValidationError(
+    #             'Não digite %(value)s no campo password',
+    #             code='invalid',
+    #             params={'value': f'"{message}"'}
+    #         )
+    #     return data
 
-    def clean_first_name(self):
-        data = self.cleaned_data.get('first_name')
+    # def clean_first_name(self):
+    #     data = self.cleaned_data.get('first_name')
 
-        message = 'John Doe'
+    #     message = 'John Doe'
 
-        if message in data:
-            raise ValidationError(
-                'Não digite %(value)s no campo first_name',
-                code='invalid',
-                params={'value': f'"{message}"'}
-            )
-        return data
+    #     if message in data:
+    #         raise ValidationError(
+    #             'Não digite %(value)s no campo first_name',
+    #             code='invalid',
+    #             params={'value': f'"{message}"'}
+    #         )
+    #     return data
 
     def clean(self):
         cleaned_data = super().clean()
