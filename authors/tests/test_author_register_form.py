@@ -147,7 +147,7 @@ class AuthorRegisterFormIntegration(DjangoTestCase):
 
         self.client.post(url, data=self.form_data, follow=True)
         response = self.client.post(url, data=self.form_data, follow=True)
-        
+
         msg = 'User e-mail is already in use'
 
         self.assertIn(msg, response.context['form'].errors.get('email'))
