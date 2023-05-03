@@ -5,6 +5,7 @@ __pycache__/
 .gitpod.yml
 static
 media
+bin/chromedriver
 # C extensions
 *.so
 
