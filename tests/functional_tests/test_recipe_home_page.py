@@ -50,7 +50,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
 
         # Usuário abre a página
         self.browser.get(self.live_server_url)
-    
+
         # Vê que tem uma paginação e clica na página 2
         page2 = self.browser.find_element(
             By.XPATH,
