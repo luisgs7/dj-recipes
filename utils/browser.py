@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.service import Service
 ROOT_PATH = Path(__file__).parent.parent
 CHROMEDRIVER_NAME = 'chromedriver'
 CHROMEDRIVER_PATH = ROOT_PATH / 'bin' / CHROMEDRIVER_NAME
-SELENIUM_HEADLESS = int(os.environ.get('SELENIUM_HEADLESS', '1'))
+SELENIUM_HEADLESS = int(os.environ.get('SELENIUM_HEADLESS', '0'))
 
 
 def make_chrome_browser(*options):
