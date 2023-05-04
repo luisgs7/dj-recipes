@@ -15,13 +15,13 @@ jobs:
         uses: luisgs7/pip-packages@v1
 
       - name: Test Recipe App
-        run: pytest project/* recipes/* utils/* authors/*
+        run: pytest -m "not functional_test"
 
       - name: Lint Flake8
         run: flake8 project/* recipes/* utils/*
 
       - name: Generate Report
-        run: coverage run -m pytest project/* recipes/* utils/* authors/*
+        run: coverage run -m pytest -m "not functional_test"
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v2
