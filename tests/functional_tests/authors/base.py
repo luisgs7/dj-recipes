@@ -8,7 +8,7 @@ from utils.browser import make_chrome_browser
 
 class AuthorsBaseTest(StaticLiveServerTestCase):
     def setUp(self) -> None:
-        self.browser = make_chrome_browser()
+        self.browser = make_chrome_browser('--headless')
         return super().setUp()
 
     def tearDown(self) -> None:
