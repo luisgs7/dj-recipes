@@ -57,3 +57,14 @@ class AuthorsRegister(AuthorsBaseTest):
 
             self.assertIn('Write your last name', form.text)
         self.form_field_test_with_callback(callback)
+
+    def test_empty_username_error_message(self):
+        def callback(form):
+            username_field = self.get_by_placeholder(form, 'Your username')
+            username_field.send_keys(' ')
+            username_field.send_keys(Keys.ENTER)
+
+            form = self.get_form()
+
+            self.assertIn('This field must not be empty', form.text)
+        self.form_field_test_with_callback(callback)
