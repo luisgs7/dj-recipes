@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from authors.forms import RegisterForm, LoginForm
+from authors.forms import RegisterForm, LoginForm, AuthorRecipeForm
 from recipes.models import Recipe
 
 
@@ -104,13 +104,20 @@ def dashborad_recipe_edit(request, id):
         is_published=False,
         author=request.user,
         pk=id,
-    )
+    ).first()
 
     if not recipe:
         raise Http404()
 
+    form = AuthorRecipeForm(
+        data=request.POST or None,
+        instance=recipe,
+    )
+
     return render(
         request,
         'authors/pages/dashboard_edit.html',
-        context={}
+        context={
+            'form': form,
+        }
     )
