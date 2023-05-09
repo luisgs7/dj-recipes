@@ -130,7 +130,7 @@ def dashborad_recipe_edit(request, id):
 
     return render(
         request,
-        'authors/pages/dashboard_edit.html',
+        'authors/pages/dashboard_recipe.html',
         context={
             'form': form,
         }
@@ -156,13 +156,12 @@ def dashboard_recipe_new(request):
         messages.success(request, 'Salvo com sucesso!')
 
         return redirect(
-            reverse('authors:dashboard_recipe_edit',
-                    args=(recipe.id)),
+            reverse('authors:dashboard_recipe_edit', args=(recipe.id, )),
         )
 
     return render(
         request,
-        'authors/pages/dashboard_edit.html',
+        'authors/pages/dashboard_recipe.html',
         context={
             'form': form,
             'form_action': reverse('authors:dashboard_recipe_new')
