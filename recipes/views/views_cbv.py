@@ -1,4 +1,5 @@
 import os
+from django.http import Http404
 from django.views.generic import ListView
 from django.db.models import Q
 
@@ -12,6 +13,7 @@ class RecipeListViewBase(ListView):
     model = Recipe
     context_object_name = 'recipes'
     ordering = ['-id']
+    template_name = 'recipes/pages/home.html'
 
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
@@ -43,11 +45,23 @@ class RecipeListViewHome(RecipeListViewBase):
 class RecipeListViewCategory(RecipeListViewBase):
     template_name = 'recipes/pages/category.html'
 
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+
+        ctx.update({
+            'title': f'{ctx.get("recipes")[0].category.name} - Category | ',
+        })
+
+        return ctx
+
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
         qs = qs.filter(
             category__id=self.kwargs.get('category_id')
         )
+
+        if not qs:
+            raise Http404()
 
         return qs
 
@@ -58,6 +72,9 @@ class RecipeListViewSearch(RecipeListViewBase):
     def get_queryset(self, *args, **kwargs):
         search_term = self.request.GET.get('q', '')
 
+        if not search_term:
+            raise Http404()
+
         qs = super().get_queryset(*args, **kwargs)
         qs = qs.filter(
             Q(
@@ -65,6 +82,7 @@ class RecipeListViewSearch(RecipeListViewBase):
                 Q(description__icontains=search_term),
             )
         )
+
         return qs
 
     def get_context_data(self, *args, **kwargs):
@@ -77,4 +95,5 @@ class RecipeListViewSearch(RecipeListViewBase):
             'search_term': search_term,
             'additional_url_query': f'&q={search_term}',
         })
+
         return ctx
