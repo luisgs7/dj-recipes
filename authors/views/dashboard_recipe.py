@@ -9,18 +9,18 @@ from recipes.models import Recipe
 
 
 class DashboardRecipe(View):
-    def get_recipe(self, id):
+    def get_recipe(self, id=None):
         recipe = None
 
-        if id:
+        if id is not None:
             recipe = Recipe.objects.filter(
                 is_published=False,
                 author=self.request.user,
                 pk=id,
                 ).first()
 
-        if not recipe:
-            raise Http404()
+            if not recipe:
+                raise Http404()
 
         return recipe
 
@@ -33,13 +33,13 @@ class DashboardRecipe(View):
             }
         )
 
-    def get(self, request, id):
+    def get(self, request, id=None):
         '''Cada método HTTP tem um função na classe.'''
         recipe = self.get_recipe(id)
         form = AuthorRecipeForm(instance=recipe)
         return self.render_recipe(form)
 
-    def post(self, request, id):
+    def post(self, request, id=None):
         recipe = self.get_recipe(id)
 
         form = AuthorRecipeForm(
@@ -59,7 +59,10 @@ class DashboardRecipe(View):
             recipe.save()
 
             messages.success(request, 'Sua receita foi salva com sucesso!')
-            return redirect(reverse('authors:dashboard_recipe_edit', args=(id,)
-                                    ))
+            return redirect(reverse(
+                    'authors:dashboard_recipe_edit', args=(
+                            recipe.id,)
+                )
+            )
 
         return self.render_recipe(form)
