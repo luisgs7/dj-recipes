@@ -45,7 +45,7 @@ class RecipeSearchViewTest(RecipeTestBase):
         search_url = reverse('recipes:search')
         response1 = self.client.get(f'{search_url}?q={title1}')
         response2 = self.client.get(f'{search_url}?q={title2}')
-        response_both = self.client.get(f'{search_url}?q=this')
+        response_both = self.client.get(f'{search_url}?q=This')
 
         self.assertIn(recipe1, response1.context['recipes'])
         self.assertNotIn(recipe2, response1.context['recipes'])
