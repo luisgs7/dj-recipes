@@ -112,11 +112,11 @@ class RecipeDetail(DetailView):
 
         return qs
 
-    # def get_context_data(self, *args, **kwargs):
-    #     ctx = super().get_context_data(*args, **kwargs)
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
 
-    #     ctx.update({
-    #         'is_detail_page': True,
-    #     })
+        ctx.update({
+            'is_detail_page': True,
+        })
 
-    #     return ctx
+        return ctx
