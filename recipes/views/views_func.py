@@ -75,3 +75,10 @@ def search(request):
         'pagination_range': pagination_range,
         'additional_url_query': f'&q={search_term}',
     })
+
+
+def theory(request):
+    return render(
+        request,
+        'recipes/pages/theory.html'
+    )
