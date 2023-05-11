@@ -1,10 +1,11 @@
 import os
 from django.db.models import Q
 from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-from recipes.models import Recipe
 from django.shortcuts import get_list_or_404, get_object_or_404
 
+from recipes.models import Recipe
 from utils.pagination import make_pagination
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -78,8 +79,13 @@ def search(request):
 
 
 def theory(request):
-    recipes = Recipe.objects.all()
-    recipes = recipes.filter(title__icontains='Reci')
+    # recipes = Recipe.objects.all()
+    # recipes = recipes.filter(title__icontains='Reci')
+    try:
+        # O .get() levanta uma exceção, o filter NÃO
+        recipes = Recipe.objects.get(pk=10000)
+    except ObjectDoesNotExist:
+        recipes = None
 
     context = {
         'recipes': recipes,
