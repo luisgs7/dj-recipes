@@ -101,9 +101,22 @@ def theory(request):
     #      id=F('author__id'),
     # ).order_by('-id', 'title')[:1]
 
-    recipes = Recipe.objects.values(
+    # recipes = Recipe.objects.values(
+    #     'id', 'title', 'author__username',
+    # )[:10]
+
+    # O .only() busca somente os citados, se houver outros dados, se
+    # preciso ele realiza consultas redundantes
+    # recipes = Recipe.objects.only(
+    #     'id', 'title', 'author__username',
+    # )
+
+    # O .defer(), busca todos os dados, com exceção do que foi passado, se
+    # preciso
+    # ele busca os dados, se tornando extremamente lento.
+    recipes = Recipe.objects.defer(
         'id', 'title', 'author__username',
-    )[:10]
+    )
 
     context = {
         'recipes': recipes,
