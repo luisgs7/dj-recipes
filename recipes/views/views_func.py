@@ -1,7 +1,7 @@
 import os
-from django.db.models import Q
+from django.db.models import Q, F
 from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
+# from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.shortcuts import get_list_or_404, get_object_or_404
 
@@ -81,11 +81,25 @@ def search(request):
 def theory(request):
     # recipes = Recipe.objects.all()
     # recipes = recipes.filter(title__icontains='Reci')
-    try:
-        # O .get() levanta uma exceção, o filter NÃO
-        recipes = Recipe.objects.get(pk=10000)
-    except ObjectDoesNotExist:
-        recipes = None
+    # try:
+    #     # O .get() levanta uma exceção, o filter NÃO
+    #     recipes = Recipe.objects.get(pk=10000)
+    # except ObjectDoesNotExist:
+    #     recipes = None
+    # recipes = Recipe.objects.filter(
+    #     Q(
+    #         Q(title__icontains='r', # noqa = E261  AND
+    #           id__gt=2,  # AND
+    #           is_published=True,) | # noqa = E261 OR
+    #         Q(
+    #           id__gt=1, # noqa = E261 Maior que > 1
+    #          )
+    #     )
+    # )[:10] # noqa = E261 LIMIT = 10
+
+    recipes = Recipe.objects.filter(
+         id=F('author__id'),
+    ).order_by('-id', 'title')[:1]
 
     context = {
         'recipes': recipes,
