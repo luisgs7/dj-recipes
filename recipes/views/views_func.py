@@ -1,5 +1,6 @@
 import os
-from django.db.models import Q, F
+from django.db.models import Q, F # noqa = F401
+from django.db.models.aggregates import Count
 from django.http import Http404
 # from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
@@ -114,12 +115,15 @@ def theory(request):
     # O .defer(), busca todos os dados, com exceção do que foi passado, se
     # preciso
     # ele busca os dados, se tornando extremamente lento.
-    recipes = Recipe.objects.defer(
-        'id', 'title', 'author__username',
-    )
+    # recipes = Recipe.objects.defer(
+    #     'id', 'title', 'author__username',
+    # )
+    recipes = Recipe.objects.values('id', 'title')[:5]
+    number_of_recipes = recipes.aggregate(number=Count('id'))
 
     context = {
         'recipes': recipes,
+        'number_of_recipes': number_of_recipes,
     }
 
     return render(
