@@ -78,7 +78,15 @@ def search(request):
 
 
 def theory(request):
+    recipes = Recipe.objects.all()
+    recipes = recipes.filter(title__icontains='Reci')
+
+    context = {
+        'recipes': recipes,
+    }
+
     return render(
         request,
-        'recipes/pages/theory.html'
+        'recipes/pages/theory.html',
+        context,
     )

@@ -8,5 +8,11 @@
 </head>
 <body>
   <h1>Theory</h1>
+  <div>
+    {% for recipe in recipes %}
+        {{ recipe.title}}
+        <hr>
+    {% endfor %}
+  </div>
 </body>
 </html>
