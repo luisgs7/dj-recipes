@@ -18,7 +18,7 @@ jobs:
         run: pytest -m "not functional_test"
 
       - name: Lint Flake8
-        run: flake8 project/* recipes/* utils/*
+        run: flake8 project/* recipes/* utils/* authors/* tests/* tag/*
 
       - name: Generate Report
         run: coverage run -m pytest project/* recipes/* utils/* authors/*
