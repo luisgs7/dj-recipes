@@ -1,18 +1,18 @@
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericStackedInline
+from django.contrib.contenttypes.admin import GenericStackedInline # noqa = F401
 
 from .models import Category, Recipe
-from tag.models import Tag
+from tag.models import Tag # noqa = F401
 
 
 class CategoryAdmin(admin.ModelAdmin):
     pass
 
 
-class TagInline(GenericStackedInline):
-    model = Tag
-    fields = 'name',
-    extra = 1
+# class TagInline(GenericStackedInline):
+#     model = Tag
+#     fields = 'name',
+#     extra = 1
 
 
 @admin.register(Recipe)
@@ -29,9 +29,11 @@ class RecipeAdmin(admin.ModelAdmin):
         'slug': ('title',)
     }
 
-    inlines = [
-        TagInline,
-    ]
+    autocomplete_fields = 'tags',
+
+    # inlines = [
+    #     TagInline,
+    # ]
 
 
 admin.site.register(Category, CategoryAdmin)
