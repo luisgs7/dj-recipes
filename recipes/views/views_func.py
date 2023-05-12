@@ -129,7 +129,7 @@ def theory(request):
     #     )
     # )
 
-    recipes = Recipe.filter_published.get_published()
+    recipes = Recipe.objects.get_published()
 
     number_of_recipes = recipes.aggregate(number=Count('id'))
 

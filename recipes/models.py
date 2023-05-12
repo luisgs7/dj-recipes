@@ -31,7 +31,7 @@ class RecipeManager(models.Manager):
 
 
 class Recipe(models.Model):
-    filter_published = RecipeManager()
+    objects = RecipeManager()
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
     slug = models.SlugField(unique=True)
