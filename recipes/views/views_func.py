@@ -1,5 +1,6 @@
 import os
-from django.db.models import Q, F # noqa = F401
+from django.db.models import Q, F, Value # noqa = F401
+from django.db.models.functions import Concat # noqa = F401
 from django.db.models.aggregates import Count
 from django.http import Http404
 # from django.core.exceptions import ObjectDoesNotExist
@@ -118,7 +119,18 @@ def theory(request):
     # recipes = Recipe.objects.defer(
     #     'id', 'title', 'author__username',
     # )
-    recipes = Recipe.objects.values('id', 'title')[:5]
+    # recipes = Recipe.objects.values('id', 'title')[:5]
+
+    # recipes = Recipe.objects.values().annotate(
+    #     author_full_name=Concat(
+    #         F('author__first_name'), Value(' '),
+    #         F('author__last_name'), Value(' ('),
+    #         F('author__username'), Value(')'),
+    #     )
+    # )
+
+    recipes = Recipe.filter_published.get_published()
+
     number_of_recipes = recipes.aggregate(number=Count('id'))
 
     context = {

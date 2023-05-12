@@ -10,7 +10,7 @@
   <h1>Theory</h1>
   <ul>
     {% for recipe in recipes %}
-        {{ recipe.id }} {{ recipe.author }}  {{ recipe.title }} {{ recipe.is_published }}
+        {{ recipe.id }} {{ recipe.author }}  {{ recipe.title }} {{ recipe.is_published }} {{ recipe.author_full_name }}
         <hr>
     {% empty %}
         No Recipe Found
