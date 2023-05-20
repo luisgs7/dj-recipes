@@ -56,7 +56,7 @@ class Recipe(models.Model):
         User, on_delete=models.SET_NULL, null=True
     )
     # tags = GenericRelation(Tag, related_query_name='recipes')
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True, default='')
 
     def __str__(self) -> str:
         return self.title
