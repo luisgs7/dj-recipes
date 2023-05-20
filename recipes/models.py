@@ -79,7 +79,7 @@ class Recipe(models.Model):
         ).first()
 
         if recipe_from_db:
-            if recipe_from_db != self.pk:
+            if recipe_from_db.pk != self.pk:
                 error_messages['title'].append(
                     'Found recipes with the same title'
                 )
