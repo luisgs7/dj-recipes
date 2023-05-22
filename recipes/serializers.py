@@ -1,7 +1,10 @@
 from django.contrib.auth.models import User # noqa= F401
 from rest_framework import serializers
 
-from recipes.models import Recipe, Tag
+from recipes.models import (
+    Recipe, Tag,
+    )
+from authors.validators import AuthorRecipeValidator
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -22,6 +25,9 @@ class RecipeSerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'author',
             'category', 'tags', 'public', 'preparation',
             'tag_objects', 'tag_links',
+            'preparation_time', 'preparation_time_unit',
+            'servings', 'servings_unit',
+            'preparation_steps', 'cover'
         ]
 
     public = serializers.BooleanField(
@@ -36,7 +42,9 @@ class RecipeSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField(
         read_only=True,
     )
-    tag_objects = serializers.StringRelatedField(
+    tag_objects = TagSerializer(
+        many=True,
+        source='tags',
         read_only=True,
     )
     tag_links = serializers.HyperlinkedRelatedField(
@@ -49,6 +57,14 @@ class RecipeSerializer(serializers.ModelSerializer):
     def any_method_name(self, recipe):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
 
+    def validate(self, attrs):
+        super_validate = super().validate(attrs)
+
+        AuthorRecipeValidator(
+            data=attrs,
+            ErrorClass=serializers.ValidationError,
+        )
+        return super_validate
 
 # class RecipeSerializer(serializers.Serializer):
 #     id = serializers.IntegerField()
