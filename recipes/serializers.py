@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User # noqa= F401
 from rest_framework import serializers
 
-from recipes.models import (
-    Recipe, Tag,
-    )
+from recipes.models import Recipe
+from tag.models import Tag
+
 from authors.validators import AuthorRecipeValidator
 
 
