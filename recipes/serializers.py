@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from recipes.models import Tag
+
 
 class TagSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -21,7 +23,8 @@ class RecipeSerializer(serializers.Serializer):
         queryset=User.objects.all(),
     )
     tags = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
+        queryset=Tag.objects.all(),
+        many=True,
     )
     tag_objects = TagSerializer(
         many=True,
