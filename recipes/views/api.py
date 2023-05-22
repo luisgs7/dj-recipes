@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status # noqa = F401
+from rest_framework import status
 
 from tag.models import Tag
 from recipes.models import Recipe
@@ -11,17 +11,32 @@ from recipes.serializers import (
 )
 
 
-@api_view()
+@api_view(http_method_names=['GET', 'POST'])
 def recipe_api_list(request):
-    recipes = Recipe.objects.get_published()[:10]
-    serializer = RecipeSerializer(
-        instance=recipes,
-        many=True,
-        context={
-            'request': request,
-            })
+    if request.method == 'GET':
+        recipes = Recipe.objects.get_published()[:10]
+        serializer = RecipeSerializer(
+            instance=recipes,
+            many=True,
+            context={
+                'request': request,
+                })
 
-    return Response(serializer.data)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = RecipeSerializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.validated_data,
+                status=status.HTTP_201_CREATED,
+                )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 @api_view()
