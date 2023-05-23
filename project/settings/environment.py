@@ -32,7 +32,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'CHANGE-ME')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get('DEBUG') == '1' else False
 
-ALLOWED_HOSTS: list[str] = ['*']
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS: list[str] = parse_comma_sep_str_to_list(
     get_env_variable('CSRF_TRUSTED_ORIGINS')
