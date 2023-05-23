@@ -12,7 +12,6 @@ author_api_router.register(
     basename='author-api',
     )
 
-print(author_api_router.urls)
 
 urlpatterns = [
     path('register/', views.register_view, name='register'),
