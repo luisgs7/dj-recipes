@@ -37,7 +37,7 @@ class RecipeAPIv2ListOld(APIView):
         )
 
 
-class RecipeAPIv2Detail(APIView):
+class RecipeAPIv2DetailOld(APIView):
     def get_recipe(self, pk):
         recipe = get_object_or_404(
             Recipe.objects.get_published(),
