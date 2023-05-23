@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     # My Dependencies
     # Django rest framework
     'rest_framework',
+    'rest_framework_simplejwt',
     # My Apps
     'recipes',
     'authors',

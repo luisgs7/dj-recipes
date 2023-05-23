@@ -11,3 +11,4 @@ from .security import *
 from .templates import *
 
 from .debug_toolbar import *
+from .rest_framework_config import *
