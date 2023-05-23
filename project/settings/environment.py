@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'CHANGE-ME')
 DEBUG = True if os.environ.get('DEBUG') == '1' else False
 
 ALLOWED_HOSTS: list[str] = parse_comma_sep_str_to_list(
-    get_env_variable('ALLOWED_HOSTS')
+    get_env_variable('ALLOWED_HOSTS', default_value='*')
 )
 
 CSRF_TRUSTED_ORIGINS: list[str] = parse_comma_sep_str_to_list(
