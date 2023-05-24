@@ -171,3 +171,35 @@ class RecipeAPIv2Test(test.APITestCase, RecipeAPIv2TestMixin):
             response.data.get('title'),
             wanted_new_title,
         )
+
+    def test_recipe_api_list_logged_user_cant_update_a_recipe_owned_by_another_user(self):  # noqa
+        # Arrange (config do test)
+        recipe = self.make_recipe()
+        access_data = self.get_auth_data(username='test_patch')
+
+        # This user cannot update the recipe because it is owned by another
+        # user.
+        another_user = self.get_auth_data(username='cant_update')
+        jwt_access_token_from_another_user = another_user.get(
+            'jwt_access_token'
+        )
+
+        # This is the actual owner of the recipe
+        author = access_data.get('user')
+        recipe.author = author
+        recipe.save()
+
+        # Action (Ação)
+        response = self.client.patch(
+            reverse('recipes:recipes-api-detail', args=(recipe.id,)),
+            data={},
+            HTTP_AUTHORIZATION=f'Bearer {jwt_access_token_from_another_user}',
+        )
+
+        # Assertion (Afirmação)
+        # Another user cannot update the recipe, so the status code
+        # must be 403 Forbidden
+        self.assertEqual(
+            response.status_code,
+            403,
+        )
