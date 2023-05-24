@@ -5,22 +5,25 @@ from recipes.tests.test_recipe_base import RecipeMixin
 from rest_framework import test
 
 
-class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
-    def get_recipe_reverse_url(self, reverse_result=None):
+class RecipeAPIv2TestMixin(RecipeMixin):
+    def get_recipe_list_reverse_url(self, reverse_result=None):
         api_url = reverse_result or reverse('recipes:recipes-api-list')
         return api_url
 
     def get_recipe_api_list(self, reverse_result=None):
-        api_url = self.get_recipe_reverse_url(reverse_result)
+        api_url = self.get_recipe_list_reverse_url(reverse_result)
         response = self.client.get(api_url)
         return response
 
-    def get_jwt_access_token(self):
+    def get_auth_data(self,
+                      username='username',
+                      password='password',
+                      ):
         userdata = {
-            'username': 'user',
-            'password': 'password',
+            'username': username,
+            'password': password,
         }
-        self.make_author(
+        user = self.make_author(
             username=userdata.get('username'),
             password=userdata.get('password'),
         )
@@ -29,7 +32,11 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
                 **userdata,
             }
         )
-        return response.data.get('access')
+        return {
+            'jwt_access_token': response.data.get('access'),
+            'jwt_refresh_token': response.data.get('refresh'),
+            'user': user,
+        }
 
     @staticmethod
     def get_recipe_raw_data():
@@ -43,6 +50,8 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
             'preparation_steps': 'This is the preparation steps.'
         }
 
+
+class RecipeAPIv2Test(test.APITestCase, RecipeAPIv2TestMixin):
     def test_recipe_api_list_returns_status_code_200(self):
         response = self.get_recipe_api_list()
         self.assertEqual(
@@ -109,7 +118,7 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
         )
 
     def test_recipe_api_list_user_must_send_jwt_tpken_to_create_recipe(self):
-        api_url = self.get_recipe_reverse_url()
+        api_url = self.get_recipe_list_reverse_url()
         response = self.client.post(api_url)
         self.assertEqual(
             response.status_code,
@@ -117,11 +126,14 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
         )
 
     def test_recipe_api_list_logged_user_can_create_a_recipe(self):
-        data = self.get_recipe_raw_data()
+        recipe_raw_data = self.get_recipe_raw_data()
+        auth_data = self.get_auth_data()
+        jwt_access_token = auth_data.get('jwt_access_token')
+
         response = self.client.post(
-            self.get_recipe_reverse_url(),
-            data=data,
-            HTTP_AUTHORIZATION=f'Bearer {self.get_jwt_access_token()}',
+            self.get_recipe_list_reverse_url(),
+            data=recipe_raw_data,
+            HTTP_AUTHORIZATION=f'Bearer {jwt_access_token}',
         )
 
         self.assertEqual(
