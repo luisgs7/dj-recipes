@@ -9,6 +9,7 @@ from .i18n import *
 from .messages import *
 from .security import *
 from .templates import *
+from .cors_headers import *
 
 from .debug_toolbar import *
 from .rest_framework_config import *

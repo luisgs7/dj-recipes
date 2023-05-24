@@ -8,6 +8,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # My Dependencies
+    # CORS Headers
+    "corsheaders",
     # Django rest framework
     'rest_framework',
     'rest_framework_simplejwt',
