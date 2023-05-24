@@ -140,3 +140,34 @@ class RecipeAPIv2Test(test.APITestCase, RecipeAPIv2TestMixin):
             response.status_code,
             201,
         )
+
+    def test_recipe_api_list_logged_user_can_update_a_recipe(self):
+        # Arrange (config do test)
+        recipe = self.make_recipe()
+        access_data = self.get_auth_data(username='test_user')
+        jwt_access_token = access_data.get('jwt_access_token')
+        author = access_data.get('user')
+        recipe.author = author
+        recipe.save()
+
+        wanted_new_title = f'The new title updated by {author.username}'
+
+        # Action (Ação)
+        response = self.client.patch(
+            reverse('recipes:recipes-api-detail', args=(recipe.id,)),
+            data={
+                'title': wanted_new_title,
+            },
+            HTTP_AUTHORIZATION=f'Bearer {jwt_access_token}',
+        )
+
+        # Assertion (Afirmação)
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertEqual(
+            response.data.get('title'),
+            wanted_new_title,
+        )
